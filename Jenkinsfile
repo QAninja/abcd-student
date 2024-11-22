@@ -12,12 +12,11 @@ pipeline {
                 }
             }
         }
-        // }
-        // stage('Prepare') {
-        //     steps {
-        //         sh 'mkdir -p results/'
-        //     }
-        // }
+        stage('Prepare') {
+            steps {
+                sh 'mkdir -p results/'
+            }
+        }
         stage('Example') {
             steps {
                 echo 'Hello!'
@@ -26,7 +25,7 @@ pipeline {
         }
         stage('DAST') {
             steps {
-                sh 'mkdir -p results/'
+                // sh 'mkdir -p results/'
                 sh '''
                     docker run --name juice-shop -d --rm \
                         -p 3000:3000 \
@@ -77,7 +76,7 @@ pipeline {
         }
         stage('Secrets') {
             steps {
-                sh 'osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json'
+                sh 'trufflehog docker --image=bkimminich/juice-shop --format json --output results/secrets-trufflehog-scan.json'
             }
         //     post {
         //         always {
@@ -90,7 +89,7 @@ pipeline {
         }
         stage('Vulnerabilities') {
             steps {
-                sh 'osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json'
+                sh 'semgrep scan /Users/olako/bezpiecznykod/abcd-student --format json --output results/vulnerabilities-semgrep-scan.json'
             }
         //     post {
         //         always {
