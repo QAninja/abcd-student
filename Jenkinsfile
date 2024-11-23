@@ -17,12 +17,6 @@ pipeline {
                 sh 'mkdir -p results/'
             }
         }
-        stage('Example') {
-            steps {
-                echo 'Hello!'
-                sh 'ls -la'
-            }
-        }
         stage('DAST') {
             steps {
                 // sh 'mkdir -p results/'
