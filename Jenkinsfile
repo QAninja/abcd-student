@@ -28,7 +28,7 @@ pipeline {
                 sh '''
                     docker run --name zap --rm \
                     --add-host=host.docker.internal:host-gateway \
-                    -v /Users/olako/bezpiecznykod/abcd-student/.zap/passive.yaml:/zap/wrk/passive_scan.yaml:rw \
+                    -v /Users/olako/bezpiecznykod/abcd-student/.zap:/zap/wrk/:rw \
                     -v /Users/olako/Downloads/Reports/:/zap/wrk/reports \
                     -t ghcr.io/zaproxy/zaproxy:stable bash -c \
                     "zap.sh -cmd -addonupdate && \
@@ -42,10 +42,11 @@ pipeline {
                 always {
                     script{
                     sh '''
-                        docker stop juice-shop || true
+                        docker stop juice-shop
+                        docker cp zap:/zap/wrk/reports/zap_xml_report.xml ${WORKSPACE}/results/zap_xml_report.xml
                     '''
                     }
-                    defectDojoPublisher(artifact: '/tmp/zap_xml_report.xml', 
+                    defectDojoPublisher(artifact: '${WORKSPACE}/results/zap_xml_report.xml', 
                         productName: 'Juice Shop', 
                         scanType: 'ZAP Scan', 
                         engagementName: 'aleksandra.k.kornecka@gmail.com')
