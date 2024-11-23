@@ -46,15 +46,15 @@ pipeline {
                         engagementName: 'aleksandra.k.kornecka@gmail.com')
                 }
             }
-            post {
-                always {
-                    script {
-                    sh '''
-                        docker stop juice-shop 
-                    '''
-                    }
-                }
-            }
+            // post {
+            //     always {
+            //         script {
+            //         sh '''
+            //             docker stop juice-shop 
+            //         '''
+            //         }
+            //     }
+            // }
         }
             // post {
             //     always {
