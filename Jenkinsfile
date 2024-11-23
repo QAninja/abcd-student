@@ -35,15 +35,15 @@ pipeline {
                     zap.sh -cmd -addoninstall communityScripts && \
                     zap.sh -cmd -addoninstall pscanrulesAlpha && \
                     zap.sh -cmd -addoninstall pscanrulesBeta && \
-                    zap.sh -cmd -autorun /zap/wrk/passive_scan.yaml"
+                    zap.sh -cmd -autorun /zap/wrk/passive.yaml"
                 '''
             }
             post {
                 always {
                     script{
                     sh '''
-                        docker stop juice-shop
                         docker cp zap:/zap/wrk/reports/zap_xml_report.xml ${WORKSPACE}/results/zap_xml_report.xml
+                        docker stop juice-shop
                     '''
                     }
                     defectDojoPublisher(artifact: '${WORKSPACE}/results/zap_xml_report.xml', 
