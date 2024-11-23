@@ -39,17 +39,17 @@ pipeline {
                     zap.sh -cmd -autorun /zap/wrk/passive_scan.yaml"
                 '''
             }
-            post {
-                always {
-                    // ${WORKSPACE} resolves to /var/jenkins_home/workspace/ABCD
-                    sh '''
-                        docker cp zap:/zap/wrk/reports/zap_html_report.html ${WORKSPACE}/results/zap_html_report.html
-                        docker cp zap:/zap/wrk/reports/zap_xml_report.xml ${WORKSPACE}/results/zap_xml_report.xml
-                        docker stop zap juice-shop
-                        docker rm zap
-                    '''
-                }
-            }
+            // post {
+            //     always {
+            //         // ${WORKSPACE} resolves to /var/jenkins_home/workspace/ABCD
+            //         sh '''
+            //             docker cp zap:/zap/wrk/reports/zap_html_report.html ${WORKSPACE}/results/zap_html_report.html
+            //             docker cp zap:/zap/wrk/reports/zap_xml_report.xml ${WORKSPACE}/results/zap_xml_report.xml
+            //             docker stop zap 
+            //             docker rm zap
+            //         '''
+            //     }
+            // }
             // post {
             //     always {
             //         defectDojoPublisher(artifact: 'results/zap_xml_report.xml', 
