@@ -4,7 +4,7 @@ pipeline {
         skipDefaultCheckout(true)
     }
     stages {
-        stage('Code checkout from GitHub') {
+        stage('Checkout code from GitHub') {
             steps {
                 script {
                     cleanWs()
@@ -61,7 +61,7 @@ pipeline {
         }
         stage('SCA') {
             steps {
-                sh 'osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json'
+                sh 'osv-scanner scan --lockfile package-lock.json --format json --output ${WORKSPACE}/results/sca-osv-scanner.json'
             }
         //     post {
         //         always {
