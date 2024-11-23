@@ -38,14 +38,14 @@ pipeline {
                     zap.sh -cmd -autorun /zap/wrk/passive_scan.yaml"
                 '''
             }
-            // post {
-            //     always {
-            //         defectDojoPublisher(artifact: 'results/zap_xml_report.xml', 
-            //             productName: 'Juice Shop', 
-            //             scanType: 'ZAP Scan', 
-            //             engagementName: 'aleksandra.k.kornecka@gmail.com')
-            //     }
-            // }
+            post {
+                always {
+                    defectDojoPublisher(artifact: '/Users/olako/Downloads/Reports/zap_xml_report.xml', 
+                        productName: 'Juice Shop', 
+                        scanType: 'ZAP Scan', 
+                        engagementName: 'aleksandra.k.kornecka@gmail.com')
+                }
+            }
             post {
                 always {
                     script {
@@ -70,7 +70,7 @@ pipeline {
             
         stage('SCA') {
             steps {
-                sh 'osv-scanner scan --lockfile package-lock.json --format json --output ${WORKSPACE}/results/sca-osv-scanner.json'
+                sh 'osv-scanner scan --lockfile package-lock.json --format json > /Users/olako/Downloads/sca-osv-scanner.json'
             }
         //     post {
         //         always {
