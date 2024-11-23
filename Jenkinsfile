@@ -66,8 +66,7 @@ pipeline {
             //             docker rm zap
             //         '''
             //     }
-            // }
-            
+            // } 
         stage('SCA') {
             steps {
                 sh 'osv-scanner scan --lockfile package-lock.json --format json > /Users/olako/Downloads/sca-osv-scanner.json'
@@ -83,7 +82,7 @@ pipeline {
         }
         stage('Secrets') {
             steps {
-                sh 'trufflehog docker --image=bkimminich/juice-shop --format json --output results/secrets-trufflehog-scan.json'
+                sh 'trufflehog docker --image=bkimminich/juice-shop --format json > /Users/olako/Downloads/secrets-trufflehog-scan.json'
             }
         //     post {
         //         always {
