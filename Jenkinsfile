@@ -19,7 +19,6 @@ pipeline {
         }
         stage('DAST') {
             steps {
-                // sh 'mkdir -p results/'
                 sh '''
                     docker run --name juice-shop -d --rm \
                         -p 3000:3000 \
@@ -31,6 +30,7 @@ pipeline {
                     --add-host=host.docker.internal:host-gateway \
                     -v /Users/olako/bezpiecznykod/abcd-student/.zap/passive.yaml:/zap/wrk/passive_scan.yaml:rw \
                     -v /Users/olako/Downloads/Reports/:/zap/wrk/reports \
+                    -v /results/:/zap/wrk/reports \
                     -t ghcr.io/zaproxy/zaproxy:stable bash -c \
                     "zap.sh -cmd -addonupdate && \
                     zap.sh -cmd -addoninstall communityScripts && \
@@ -39,6 +39,24 @@ pipeline {
                     zap.sh -cmd -autorun /zap/wrk/passive_scan.yaml"
                 '''
             }
+            // post {
+            //     always {
+            //         defectDojoPublisher(artifact: 'results/zap_xml_report.xml', 
+            //             productName: 'Juice Shop', 
+            //             scanType: 'ZAP Scan', 
+            //             engagementName: 'aleksandra.k.kornecka@gmail.com')
+            //     }
+            // }
+            post {
+                always {
+                    script {
+                    sh '''
+                        docker stop juice-shop 
+                    '''
+                    }
+                }
+            }
+        }
             // post {
             //     always {
             //         // ${WORKSPACE} resolves to /var/jenkins_home/workspace/ABCD
@@ -50,15 +68,7 @@ pipeline {
             //         '''
             //     }
             // }
-            // post {
-            //     always {
-            //         defectDojoPublisher(artifact: 'results/zap_xml_report.xml', 
-            //             productName: 'Juice Shop', 
-            //             scanType: 'ZAP Scan', 
-            //             engagementName: 'aleksandra.k.kornecka@gmail.com')
-            //     }
-            // }
-        }
+            
         stage('SCA') {
             steps {
                 sh 'osv-scanner scan --lockfile package-lock.json --format json --output ${WORKSPACE}/results/sca-osv-scanner.json'
