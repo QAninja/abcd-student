@@ -82,7 +82,7 @@ pipeline {
         }
         stage('Skan SAST sekretow z Trufflehog') {
             steps {
-                sh 'trufflehog docker --image=bkimminich/juice-shop --only-verified > results/secrets-trufflehog-scan.json'
+                sh 'trufflehog filesystem --directory /Users/olako/bezpiecznykod/abcd-student --only-verified --branch main --json > ~/Downloads/trufflehog-results.json'
             }
         //     post {
         //         always {
