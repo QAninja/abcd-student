@@ -38,14 +38,14 @@ pipeline {
                     zap.sh -cmd -autorun /zap/wrk/passive_scan.yaml"
                 '''
             }
-            // post {
-            //     always {
-            //         defectDojoPublisher(artifact: '/Users/olako/Downloads/Reports/zap_xml_report.xml', 
-            //             productName: 'Juice Shop', 
-            //             scanType: 'ZAP Scan', 
-            //             engagementName: 'aleksandra.k.kornecka@gmail.com')
-            //     }
-            // }
+            post {
+                always {
+                    defectDojoPublisher(artifact: '/Users/olako/Downloads/Reports/zap_xml_report.xml', 
+                        productName: 'Juice Shop', 
+                        scanType: 'ZAP Scan', 
+                        engagementName: 'aleksandra.k.kornecka@gmail.com')
+                }
+            }
             post {
                 always {
                     script {
