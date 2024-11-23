@@ -40,21 +40,17 @@ pipeline {
             }
             post {
                 always {
-                    defectDojoPublisher(artifact: '/Users/olako/Downloads/Reports/zap_xml_report.xml', 
+                    script{
+                    sh '''
+                        docker stop juice-shop || true
+                    '''
+                    }
+                    defectDojoPublisher(artifact: '/tmp/zap_xml_report.xml', 
                         productName: 'Juice Shop', 
                         scanType: 'ZAP Scan', 
                         engagementName: 'aleksandra.k.kornecka@gmail.com')
                 }
             }
-            // post {
-            //     always {
-            //         script {
-            //         sh '''
-            //             docker stop juice-shop 
-            //         '''
-            //         }
-            //     }
-            // }
         }
             // post {
             //     always {
