@@ -4,7 +4,7 @@ pipeline {
         skipDefaultCheckout(true)
     }
     stages {
-        stage('Checkout code from GitHub') {
+        stage('Swiezy kod z GitHub') {
             steps {
                 script {
                     cleanWs()
