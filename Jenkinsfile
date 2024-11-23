@@ -12,12 +12,12 @@ pipeline {
                 }
             }
         }
-        stage('Prepare') {
+        stage('Przygotowanie') {
             steps {
                 sh 'mkdir -p results/'
             }
         }
-        stage('DAST') {
+        stage('Skan DAST ZAP') {
             steps {
                 sh '''
                     docker run --name juice-shop -d --rm \
@@ -67,9 +67,9 @@ pipeline {
             //         '''
             //     }
             // } 
-        stage('SCA') {
+        stage('Analiza skladu SCA z OSV') {
             steps {
-                sh 'osv-scanner scan --lockfile package-lock.json --format json > /Users/olako/Downloads/sca-osv-scanner.json'
+                sh 'osv-scanner scan --lockfile package-lock.json --format json > results/sca-osv-scanner.json'
             }
         //     post {
         //         always {
@@ -80,9 +80,9 @@ pipeline {
         //     }
         // }
         }
-        stage('Secrets') {
+        stage('Skan SAST sekretow z Trufflehog') {
             steps {
-                sh 'trufflehog docker --image=bkimminich/juice-shop > /Users/olako/Downloads/secrets-trufflehog-scan.json'
+                sh 'trufflehog docker --image=bkimminich/juice-shop --only-verified > results/secrets-trufflehog-scan.json'
             }
         //     post {
         //         always {
@@ -93,9 +93,9 @@ pipeline {
         //     }
         // }
         }
-        stage('Vulnerabilities') {
+        stage('Skan SAST podatnosci z Semgrep') {
             steps {
-                sh 'semgrep scan /Users/olako/bezpiecznykod/abcd-student > /Users/olako/Downloads/vulnerabilities-semgrep-scan.json'
+                sh 'semgrep scan /Users/olako/bezpiecznykod/abcd-student > results/vulnerabilities-semgrep-scan.json'
             }
         //     post {
         //         always {
