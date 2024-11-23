@@ -69,7 +69,7 @@ pipeline {
             // } 
         stage('Analiza skladu SCA z OSV') {
             steps {
-                sh 'osv-scanner scan --lockfile package-lock.json --format json > results/sca-osv-scanner.json'
+                sh 'osv-scanner scan --lockfile package-lock.json --format json > ${WORKSPACE}/results/sca-osv-scanner.json'
             }
         //     post {
         //         always {
