@@ -82,7 +82,7 @@ pipeline {
         }
         stage('Secrets') {
             steps {
-                sh 'trufflehog docker --image=bkimminich/juice-shop --format json > /Users/olako/Downloads/secrets-trufflehog-scan.json'
+                sh 'trufflehog docker --image=bkimminich/juice-shop > /Users/olako/Downloads/secrets-trufflehog-scan.json'
             }
         //     post {
         //         always {
@@ -95,7 +95,7 @@ pipeline {
         }
         stage('Vulnerabilities') {
             steps {
-                sh 'semgrep scan /Users/olako/bezpiecznykod/abcd-student --format json --output results/vulnerabilities-semgrep-scan.json'
+                sh 'semgrep scan /Users/olako/bezpiecznykod/abcd-student > /Users/olako/Downloads/vulnerabilities-semgrep-scan.json'
             }
         //     post {
         //         always {
