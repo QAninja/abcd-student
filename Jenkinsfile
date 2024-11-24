@@ -29,7 +29,7 @@ pipeline {
                     docker run --name zap \
                     --add-host=host.docker.internal:host-gateway \
                     -v /Users/olako/bezpiecznykod/abcd-student/.zap:/zap/wrk/:rw \
-                    -v ${WORKSPACE}/results:/zap/wrk/reports/:rw \
+                    -v /var/jenkins_home/workspace/ABCD:/zap/wrk/reports/:rw \
                     -t ghcr.io/zaproxy/zaproxy:stable bash -c \
                     "zap.sh -cmd -addonupdate && \
                     zap.sh -cmd -addoninstall communityScripts && \
@@ -42,7 +42,7 @@ pipeline {
                 always {
                     script{
                     sh '''
-                        docker cp zap:/zap/wrk/reports/zap_xml_report.xml ${WORKSPACE}/results/zap_xml_report.xml
+                        docker cp zap:/zap/wrk/reports/zap_xml_report.xml /var/jenkins_home/workspace/ABCD/zap_xml_report.xml
                         docker stop juice-shop
                         docker stop zap
                         docker rm zap
