@@ -28,30 +28,35 @@ pipeline {
                 sh '''
                     docker run --name zap \
                     --add-host=host.docker.internal:host-gateway \
-                    -v /Users/olako/bezpiecznykod/abcd-student/.zap:/zap/wrk/:rw \
-                    -v /var/jenkins_home/workspace/ABCD:/zap/wrk/reports/:rw \
+                    -v /Users/olako/bezpiecznykod/abcd-student/.zap:/zap/wrk/:rw
                     -t ghcr.io/zaproxy/zaproxy:stable bash -c \
                     "zap.sh -cmd -addonupdate && \
                     zap.sh -cmd -addoninstall communityScripts && \
                     zap.sh -cmd -addoninstall pscanrulesAlpha && \
                     zap.sh -cmd -addoninstall pscanrulesBeta && \
-                    zap.sh -cmd -autorun /zap/wrk/passive.yaml"
+                    zap.sh -cmd -autorun /zap/wrk/passive.yaml" \
+                    || true
                 '''
             }
             post {
                 always {
                     script{
                     sh '''
-                        docker cp zap:/zap/wrk/reports/zap_xml_report.xml /var/jenkins_home/workspace/ABCD/zap_xml_report.xml
+                        docker cp zap:/zap/wrk/reports/zap_xml_report.xml /var/jenkins_home/workspace/ABCD/results/zap_xml_report.xml
+                    '''
+                    }
+                    defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/zap_xml_report.xml', 
+                        productName: 'Juice Shop', 
+                        scanType: 'ZAP Scan', 
+                        engagementName: 'aleksandra.k.kornecka@gmail.com')
+                    script{
+                    sh '''
+                        docker cp zap:/zap/wrk/reports/zap_xml_report.xml /var/jenkins_home/workspace/ABCD/results/zap_xml_report.xml
                         docker stop juice-shop
                         docker stop zap
                         docker rm zap
                     '''
                     }
-                    defectDojoPublisher(artifact: '${WORKSPACE}/results/zap_xml_report.xml', 
-                        productName: 'Juice Shop', 
-                        scanType: 'ZAP Scan', 
-                        engagementName: 'aleksandra.k.kornecka@gmail.com')
                 }
             }
         }
