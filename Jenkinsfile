@@ -71,46 +71,44 @@ pipeline {
             //         '''
             //     }
             // } 
-        // stage('Analiza skladu SCA z OSV') {
+        stage('Analiza skladu SCA z OSV') {
+            steps {
+                sh 'osv-scanner scan --lockfile /Users/olako/bezpiecznykod/abcd-student/package-lock.json --format json > /var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json || true'
+            }
+            post {
+                always {
+                    defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json', 
+                        productName: 'Juice Shop', 
+                        scanType: 'OSV Scan', 
+                        engagementName: 'aleksandra.k.kornecka@gmail.com')
+            }
+        }
+        }
+        // stage('Skan SAST sekretow z Trufflehog') {
         //     steps {
-        //         sh 'osv-scanner scan --lockfile /Users/olako/bezpiecznykod/abcd-student/package-lock.json --format json > /var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json || true'
-        //         sh 'osv-scanner scan --lockfile /Users/olako/bezpiecznykod/abcd-student/package-lock.json --format json > ~/Downloads/report/sca-osv-scanner.json || true'
-        //         sh 'sleep 5'
+        //         sh 'trufflehog git file://. --only-verified --branch main --json > /var/jenkins_home/workspace/ABCD/results/trufflehog-results.json || true'
         //     }
         //     post {
         //         always {
-        //             defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json', 
+        //             defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/trufflehog-results.json', 
         //                 productName: 'Juice Shop', 
-        //                 scanType: 'OSV Scan', 
+        //                 scanType: 'Trufflehog Scan', 
         //                 engagementName: 'aleksandra.k.kornecka@gmail.com')
+        //         }
         //     }
         // }
-        //}
-        stage('Skan SAST sekretow z Trufflehog') {
-            steps {
-                sh 'trufflehog git file://. --only-verified --branch main --json > /var/jenkins_home/workspace/ABCD/results/trufflehog-results.json || true'
-            }
-            post {
-                always {
-                    defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/trufflehog-results.json', 
-                        productName: 'Juice Shop', 
-                        scanType: 'Trufflehog Scan', 
-                        engagementName: 'aleksandra.k.kornecka@gmail.com')
-                }
-            }
-        }
-        stage('Skan SAST podatnosci z Semgrep') {
-            steps {
-                sh 'semgrep scan ./ --json > /var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json'
-            }
-            post {
-                always {
-                    defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json', 
-                        productName: 'Juice Shop', 
-                        scanType: 'Semgrep JSON Report', 
-                        engagementName: 'aleksandra.k.kornecka@gmail.com')
-                }
-            }
-        }
+        // stage('Skan SAST podatnosci z Semgrep') {
+        //     steps {
+        //         sh 'semgrep scan ./ --json > /var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json'
+        //     }
+        //     post {
+        //         always {
+        //             defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json', 
+        //                 productName: 'Juice Shop', 
+        //                 scanType: 'Semgrep JSON Report', 
+        //                 engagementName: 'aleksandra.k.kornecka@gmail.com')
+        //         }
+        //     }
+        // }
     }
 }
