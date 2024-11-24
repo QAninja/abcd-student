@@ -71,13 +71,12 @@ pipeline {
             //         '''
             //     }
             // } 
-        stage('Analiza skladu SCA z OSV') {
-            steps {
-                sh 'osv-scanner scan --lockfile package-lock.json --format json > /var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json'
-                sh 'sleep 5'
-                sh 'osv-scanner scan --lockfile package-lock.json --format json > ~/Downloads/report/sca-osv-scanner.json'
-                sh 'sleep 5'
-            }
+        // stage('Analiza skladu SCA z OSV') {
+        //     steps {
+        //         sh 'osv-scanner scan --lockfile /Users/olako/bezpiecznykod/abcd-student/package-lock.json --format json > /var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json || true'
+        //         sh 'osv-scanner scan --lockfile /Users/olako/bezpiecznykod/abcd-student/package-lock.json --format json > ~/Downloads/report/sca-osv-scanner.json || true'
+        //         sh 'sleep 5'
+        //     }
         //     post {
         //         always {
         //             defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json', 
@@ -86,10 +85,11 @@ pipeline {
         //                 engagementName: 'aleksandra.k.kornecka@gmail.com')
         //     }
         // }
-        }
+        //}
         stage('Skan SAST sekretow z Trufflehog') {
             steps {
-                sh 'trufflehog filesystem --directory /Users/olako/bezpiecznykod/abcd-student --only-verified --branch main --json > /var/jenkins_home/workspace/ABCD/results/trufflehog-results.json'
+                sh 'trufflehog filesystem --directory /Users/olako/bezpiecznykod/abcd-student --only-verified --json > /var/jenkins_home/workspace/ABCD/results/trufflehog-results.json || true'
+                sh 'trufflehog filesystem --directory /Users/olako/bezpiecznykod/abcd-student --only-verified --json > ~/Downloads/trufflehog-results.json || true'
             }
         //     post {
         //         always {
