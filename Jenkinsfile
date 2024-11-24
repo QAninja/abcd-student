@@ -101,7 +101,7 @@ pipeline {
         }
         stage('Skan SAST podatnosci z Semgrep') {
             steps {
-                sh 'semgrep scan ./ > /var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json'
+                sh 'semgrep scan ./ --json > /var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json'
             }
             post {
                 always {
