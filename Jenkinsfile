@@ -73,7 +73,7 @@ pipeline {
             // } 
         stage('Analiza skladu SCA z OSV') {
             steps {
-                sh 'osv-scanner scan --lockfile /Users/olako/bezpiecznykod/abcd-student/package-lock.json --format json > /var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json || true'
+                sh 'osv-scanner scan --lockfile ./package-lock.json --format json > /var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json || true'
             }
             post {
                 always {
