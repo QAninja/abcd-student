@@ -89,29 +89,28 @@ pipeline {
         stage('Skan SAST sekretow z Trufflehog') {
             steps {
                 sh 'trufflehog git file://. --only-verified --branch main --json > /var/jenkins_home/workspace/ABCD/results/trufflehog-results.json || true'
-                sh 'trufflehog git file://. --only-verified --branch main --json > ~/Downloads/trufflehog-results.json || true'
             }
-        //     post {
-        //         always {
-        //             defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/secrets-trufflehog-scan.json', 
-        //                 productName: 'Juice Shop', 
-        //                 scanType: 'Trufflehog Scan', 
-        //                 engagementName: 'aleksandra.k.kornecka@gmail.com')
-        //     }
-        // }
+            post {
+                always {
+                    defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/trufflehog-results.json', 
+                        productName: 'Juice Shop', 
+                        scanType: 'Trufflehog Scan', 
+                        engagementName: 'aleksandra.k.kornecka@gmail.com')
+                }
+            }
         }
         stage('Skan SAST podatnosci z Semgrep') {
             steps {
                 sh 'semgrep scan ./ > /var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json'
             }
-        //     post {
-        //         always {
-        //             defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json', 
-        //                 productName: 'Juice Shop', 
-        //                 scanType: 'Semgrep JSON Report', 
-        //                 engagementName: 'aleksandra.k.kornecka@gmail.com')
-        //     }
-        // }
+            post {
+                always {
+                    defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json', 
+                        productName: 'Juice Shop', 
+                        scanType: 'Semgrep JSON Report', 
+                        engagementName: 'aleksandra.k.kornecka@gmail.com')
+                }
+            }
         }
     }
 }
