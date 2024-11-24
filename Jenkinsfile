@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Przygotowanie') {
             steps {
-                sh 'mkdir -p results/'
+                sh 'mkdir -p /var/jenkins_home/workspace/ABCD/results/'
             }
         }
         // stage('Skan DAST ZAP') {
@@ -74,15 +74,18 @@ pipeline {
         stage('Analiza skladu SCA z OSV') {
             steps {
                 sh 'osv-scanner scan --lockfile package-lock.json --format json > /var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json'
+                sh 'sleep 5'
+                sh 'osv-scanner scan --lockfile package-lock.json --format json > ~/Downloads/report/sca-osv-scanner.json'
+                sh 'sleep 5'
             }
-            post {
-                always {
-                    defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json', 
-                        productName: 'Juice Shop', 
-                        scanType: 'OSV Scan', 
-                        engagementName: 'aleksandra.k.kornecka@gmail.com')
-            }
-        }
+        //     post {
+        //         always {
+        //             defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json', 
+        //                 productName: 'Juice Shop', 
+        //                 scanType: 'OSV Scan', 
+        //                 engagementName: 'aleksandra.k.kornecka@gmail.com')
+        //     }
+        // }
         }
         stage('Skan SAST sekretow z Trufflehog') {
             steps {
