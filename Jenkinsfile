@@ -88,8 +88,8 @@ pipeline {
         //}
         stage('Skan SAST sekretow z Trufflehog') {
             steps {
-                sh 'trufflehog filesystem --directory /Users/olako/bezpiecznykod/abcd-student --only-verified --json > /var/jenkins_home/workspace/ABCD/results/trufflehog-results.json || true'
-                sh 'trufflehog filesystem --directory /Users/olako/bezpiecznykod/abcd-student --only-verified --json > ~/Downloads/trufflehog-results.json || true'
+                sh 'trufflehog git file://. --only-verified --branch main --json > /var/jenkins_home/workspace/ABCD/results/trufflehog-results.json || true'
+                sh 'trufflehog git file://. --only-verified --branch main --json > ~/Downloads/trufflehog-results.json || true'
             }
         //     post {
         //         always {
@@ -102,7 +102,7 @@ pipeline {
         }
         stage('Skan SAST podatnosci z Semgrep') {
             steps {
-                sh 'semgrep scan /Users/olako/bezpiecznykod/abcd-student > /var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json'
+                sh 'semgrep scan ./ > /var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json'
             }
         //     post {
         //         always {
