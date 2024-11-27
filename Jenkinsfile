@@ -75,14 +75,14 @@ pipeline {
             steps {
                 sh 'osv-scanner scan --lockfile ./package-lock.json --format json > /var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json || true'
             }
-            post {
-                always {
-                    defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json', 
-                        productName: 'Juice Shop', 
-                        scanType: 'OSV Scan', 
-                        engagementName: 'aleksandra.k.kornecka@gmail.com')
-            }
-        }
+        //     post {
+        //         always {
+        //             defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/sca-osv-scanner.json', 
+        //                 productName: 'Juice Shop', 
+        //                 scanType: 'OSV Scan', 
+        //                 engagementName: 'aleksandra.k.kornecka@gmail.com')
+        //     }
+        // }
         }
         // stage('Skan SAST sekretow z Trufflehog') {
         //     steps {
@@ -97,10 +97,10 @@ pipeline {
         //         }
         //     }
         // }
-        // stage('Skan SAST podatnosci z Semgrep') {
-        //     steps {
-        //         sh 'semgrep scan ./ --json > /var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json'
-        //     }
+        stage('Skan SAST podatnosci z Semgrep') {
+            steps {
+                sh 'semgrep scan ./ --json > /var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json'
+            }
         //     post {
         //         always {
         //             defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json', 
