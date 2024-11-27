@@ -84,10 +84,10 @@ pipeline {
         //     }
         // }
         }
-        // stage('Skan SAST sekretow z Trufflehog') {
-        //     steps {
-        //         sh 'trufflehog git file://. --only-verified --branch main --json > /var/jenkins_home/workspace/ABCD/results/trufflehog-results.json || true'
-        //     }
+        stage('Skan SAST sekretow z Trufflehog') {
+            steps {
+                sh 'trufflehog git file://. --only-verified --branch main --json > /var/jenkins_home/workspace/ABCD/results/trufflehog-results.json || true'
+            }
         //     post {
         //         always {
         //             defectDojoPublisher(artifact: '/var/jenkins_home/workspace/ABCD/results/trufflehog-results.json', 
@@ -96,10 +96,10 @@ pipeline {
         //                 engagementName: 'aleksandra.k.kornecka@gmail.com')
         //         }
         //     }
-        // }
+        }
         stage('Skan SAST podatnosci z Semgrep') {
             steps {
-                sh 'semgrep scan ./ --json > /var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json'
+                sh 'semgrep scan ./ --json > /var/jenkins_home/workspace/ABCD/results/vulnerabilities-semgrep-scan.json || true'
             }
         //     post {
         //         always {
